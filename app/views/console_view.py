@@ -140,6 +140,7 @@ class ConsoleView:
         print("  3. Afficher les statistiques de l'étude de marché")
         print("  4. Scraper une nouvelle catégorie technologique (avec pagination)")
         print("  5. Exporter en CSV et sauvegarder dans SQLite")
+        print("  6. Lancer l'assistant vocal & IA J.A.R.V.I.S.")
         print("  0. Quitter")
         print("-" * 76)
         return input("Votre choix : ").strip()

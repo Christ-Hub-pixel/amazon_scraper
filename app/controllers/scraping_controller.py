@@ -131,6 +131,11 @@ class ScrapingController:
                     self.sauvegarder_tout()
             elif choix == "5":
                 self.sauvegarder_tout()
+            elif choix == "6":
+                from jarvis.assistant import JarvisAssistant
+
+                assistant = JarvisAssistant(activer_voix=True)
+                assistant.demarrer_session_interactive()
             elif choix == "0":
                 print("Fermeture de l'application Amazon Scraper.")
                 break
