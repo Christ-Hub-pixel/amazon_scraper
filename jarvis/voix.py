@@ -129,3 +129,4 @@ class MoteurVocal:
                     fichier_wav.unlink()
                 except Exception:
                     pass
+

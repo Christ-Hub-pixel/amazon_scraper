@@ -150,3 +150,4 @@ class CompetencesJarvis:
                 )
             except Exception:
                 pass
+

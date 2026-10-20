@@ -35,7 +35,24 @@ def main() -> None:
         action="store_true",
         help="Désactiver la synthèse vocale (mode texte uniquement)",
     )
+    parser.add_argument(
+        "--web",
+        action="store_true",
+        help="Lancer l'environnement virtuel interactif en HTML sur http://localhost:8080",
+    )
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=8080,
+        help="Port du serveur Web HTML (par défaut : 8080)",
+    )
     args = parser.parse_args()
+
+    if args.web:
+        from jarvis.web_server import lancer_serveur_web
+
+        lancer_serveur_web(port=args.port)
+        return
 
     assistant = JarvisAssistant(activer_voix=not args.muet)
 
@@ -49,3 +66,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+

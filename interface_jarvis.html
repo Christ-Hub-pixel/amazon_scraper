@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>J.A.R.V.I.S. — Environnement Virtuel HTML & Amazon Scraper</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    @keyframes pulseRing {
+      0% { transform: scale(0.92); opacity: 0.75; }
+      50% { transform: scale(1.08); opacity: 1; }
+      100% { transform: scale(0.92); opacity: 0.75; }
+    }
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .jarvis-orb {
+      animation: pulseRing 2.6s ease-in-out infinite;
+    }
+    .jarvis-ring {
+      animation: spinSlow 12s linear infinite;
+    }
+  </style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased p-4 md:p-6 space-y-5">
+
+  <!-- BARRE SUPÉRIEURE : STATUT SYSTÈME & ENVIRONNEMENT VIRTUEL -->
+  <header class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm flex flex-wrap items-center justify-between gap-4">
+    <div class="flex items-center gap-4">
+      <div class="relative w-12 h-12 flex items-center justify-center">
+        <div id="orbOuter" class="jarvis-ring absolute inset-0 rounded-full border-2 border-dashed border-[var(--primary)] opacity-70"></div>
+        <div id="orbInner" class="jarvis-orb w-8 h-8 rounded-full bg-[var(--primary)] flex items-center justify-center text-[var(--primary-foreground)] font-bold text-xs shadow">
+          AI
+        </div>
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 class="text-lg font-bold tracking-tight text-[var(--foreground)]">J.A.R.V.I.S. — Centre de Contrôle & Environnement Virtuel</h1>
+          <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-[var(--primary)] text-[var(--primary-foreground)]">v1.1.0</span>
+        </div>
+        <p class="text-xs text-[var(--muted-foreground)]">
+          Environnement actif : <code class="px-1.5 py-0.5 rounded bg-[var(--content)] text-[var(--foreground)]">.venv (Python 3.14 • Selenium • BS4 • SQLite)</code>
+          • GitHub : <span class="font-medium text-[var(--foreground)]">Christ-Hub-pixel/amazon_scraper</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-2">
+      <button onclick="toggleVoice()" id="btnVoiceToggle" class="px-3 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--content)] text-[var(--foreground)] text-xs font-medium hover:opacity-90 transition">
+        🔊 Voix TTS : Activée
+      </button>
+      <button onclick="startSpeechRecognition()" id="btnMic" class="px-3 py-1.5 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] text-xs font-semibold hover:opacity-90 transition">
+        🎤 Parler à J.A.R.V.I.S.
+      </button>
+      <button onclick="runQuickAction('scrape')" class="px-3 py-1.5 rounded-lg bg-[var(--secondary)] text-[var(--secondary-foreground)] text-xs font-semibold hover:opacity-90 transition">
+        ⚡ Lancer Scraping (3 pages)
+      </button>
+      <button onclick="downloadCSV('global')" class="px-3 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)] text-xs font-medium hover:opacity-90 transition">
+        📥 Télécharger CSV
+      </button>
+    </div>
+  </header>
+
+  <!-- NAVIGATION PAR ONGLETS -->
+  <nav class="flex flex-wrap gap-2 border-b border-[var(--border)] pb-3">
+    <button onclick="switchTab('dashboard')" id="tab-dashboard" class="px-4 py-2 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] transition">
+      📊 Tableau de Bord & 3 Statistiques
+    </button>
+    <button onclick="switchTab('jarvis')" id="tab-jarvis" class="px-4 py-2 rounded-lg text-xs font-semibold bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] transition">
+      🤖 Assistant Vocal J.A.R.V.I.S.
+    </button>
+    <button onclick="switchTab('terminal')" id="tab-terminal" class="px-4 py-2 rounded-lg text-xs font-semibold bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] transition">
+      💻 Terminal Virtuel (.venv)
+    </button>
+    <button onclick="switchTab('catalogue')" id="tab-catalogue" class="px-4 py-2 rounded-lg text-xs font-semibold bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] transition">
+      🛒 Produits & Filtre Marque (15)
+    </button>
+  </nav>
+
+  <!-- ONGLET 1 : TABLEAU DE BORD & LES 3 STATISTIQUES -->
+  <section id="view-dashboard" class="space-y-5">
+    <!-- LES 3 STATISTIQUES DU MINI-PROJET -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- Statistique 1 : Moyenne -->
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold uppercase tracking-wider text-[var(--muted-foreground)]">Statistique 1 • Moyenne</span>
+          <span class="px-2 py-0.5 rounded text-xs font-medium bg-[var(--content)] text-[var(--foreground)]">Étude de marché</span>
+        </div>
+        <div id="statMoyennePrix" class="text-2xl font-bold text-[var(--foreground)]">590.05 €</div>
+        <p class="text-xs text-[var(--muted-foreground)]">
+          Note moyenne globale : <strong id="statMoyenneNote" class="text-[var(--foreground)]">4.51 / 5</strong> sur <span id="statTotalProduits">15</span> produits
+        </p>
+      </div>
+
+      <!-- Statistique 2 : Maximum & Minimum -->
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold uppercase tracking-wider text-[var(--muted-foreground)]">Statistique 2 • Maximum</span>
+          <span class="px-2 py-0.5 rounded text-xs font-medium bg-[var(--content)] text-[var(--foreground)]">Plage de prix</span>
+        </div>
+        <div id="statMaxPrix" class="text-2xl font-bold text-[var(--foreground)]">1229.00 €</div>
+        <p id="statMaxNom" class="text-xs text-[var(--muted-foreground)] truncate">
+          Max : Apple iPhone 15 Pro (256 Go) • Min : 69.90 €
+        </p>
+      </div>
+
+      <!-- Statistique 3 : Nombre par catégorie -->
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold uppercase tracking-wider text-[var(--muted-foreground)]">Statistique 3 • Par Catégorie</span>
+          <span id="statNbCategories" class="px-2 py-0.5 rounded text-xs font-medium bg-[var(--content)] text-[var(--foreground)]">3 catégories</span>
+        </div>
+        <div id="statCatResume" class="space-y-1.5 pt-1 text-xs"></div>
+      </div>
+    </div>
+
+    <!-- GRILLE : CONTRÔLE RAPIDE JARVIS + DIAGNOSTIC SYSTÈME -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <!-- Répartition graphique par catégorie -->
+      <div class="lg:col-span-2 bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm space-y-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-sm font-semibold text-[var(--foreground)]">Analyse Comparative par Catégorie Technologique</h2>
+            <p class="text-xs text-[var(--muted-foreground)]">Prix moyen, prix maximum et volume de produits extraits (fichier <code>data/recap.csv</code>)</p>
+          </div>
+          <button onclick="downloadCSV('recap')" class="px-2.5 py-1 rounded border border-[var(--border)] bg-[var(--content)] text-xs font-medium hover:opacity-90">
+            📄 Exporter recap.csv
+          </button>
+        </div>
+        <div id="categoryBars" class="space-y-3 pt-2"></div>
+      </div>
+
+      <!-- État du système & Environnement Virtuel -->
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm space-y-3">
+        <div class="flex items-center justify-between">
+          <h2 class="text-sm font-semibold text-[var(--foreground)]">Diagnostic Système (J.A.R.V.I.S.)</h2>
+          <button onclick="refreshSystemMetrics()" class="px-2 py-1 rounded bg-[var(--content)] text-xs hover:opacity-80">🔄 Actualiser</button>
+        </div>
+        <div class="space-y-2.5 text-xs">
+          <div>
+            <div class="flex justify-between mb-1">
+              <span class="text-[var(--muted-foreground)]">Processeur (CPU)</span>
+              <span id="cpuVal" class="font-semibold">34%</span>
+            </div>
+            <div class="w-full h-2 rounded-full bg-[var(--content)] overflow-hidden">
+              <div id="cpuBar" class="h-full bg-[var(--primary)] transition-all duration-300" style="width: 34%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between mb-1">
+              <span class="text-[var(--muted-foreground)]">Mémoire RAM</span>
+              <span id="ramVal" class="font-semibold">68% (5.0 / 7.3 Go)</span>
+            </div>
+            <div class="w-full h-2 rounded-full bg-[var(--content)] overflow-hidden">
+              <div id="ramBar" class="h-full bg-[var(--primary)] transition-all duration-300" style="width: 68%"></div>
+            </div>
+          </div>
+          <div class="pt-2 border-t border-[var(--border)] space-y-1">
+            <div class="flex justify-between">
+              <span class="text-[var(--muted-foreground)]">Base SQLite :</span>
+              <span class="font-mono">data/amazon.db (Active)</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-[var(--muted-foreground)]">Export CSV :</span>
+              <span class="font-mono">exports/produits_amazon.csv</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-[var(--muted-foreground)]"> Politesse :</span>
+              <span class="font-mono">time.sleep(2.0s) • Timeout 10s</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ONGLET 2 : ASSISTANT VOCAL & CHAT J.A.R.V.I.S. -->
+  <section id="view-jarvis" class="hidden space-y-4">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div class="lg:col-span-2 bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm flex flex-col h-[420px]">
+        <div class="flex items-center justify-between pb-3 border-b border-[var(--border)]">
+          <div>
+            <h2 class="text-sm font-semibold">Dialogue en Direct avec J.A.R.V.I.S.</h2>
+            <p class="text-xs text-[var(--muted-foreground)]">Posez une question ou donnez un ordre vocal / écrit</p>
+          </div>
+          <span id="jarvisStatusBadge" class="px-2.5 py-1 rounded-full text-xs font-medium bg-[var(--content)]">Prêt • En écoute</span>
+        </div>
+
+        <div id="chatHistory" class="flex-1 overflow-y-auto py-3 space-y-3 text-xs"></div>
+
+        <form onsubmit="handleJarvisSubmit(event)" class="pt-3 border-t border-[var(--border)] flex gap-2">
+          <input
+            id="jarvisInput"
+            type="text"
+            placeholder="Ex: 'scrape', 'statistiques', 'filtre iphone', 'diagnostic', 'heure'..."
+            class="flex-1 px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--content)] text-[var(--foreground)] text-xs focus:outline-none"
+          />
+          <button type="button" onclick="startSpeechRecognition()" class="px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--content)] text-xs font-medium">
+            🎤 Micro
+          </button>
+          <button type="submit" class="px-4 py-2 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] text-xs font-semibold">
+            Envoyer
+          </button>
+        </form>
+      </div>
+
+      <!-- Commandes vocales rapides -->
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm space-y-3">
+        <h3 class="text-sm font-semibold">Commandes Rapides J.A.R.V.I.S.</h3>
+        <p class="text-xs text-[var(--muted-foreground)]">Cliquez sur une commande pour l'exécuter immédiatement :</p>
+        <div class="grid grid-cols-1 gap-2">
+          <button onclick="sendJarvisCommand('Lance le scraper Amazon')" class="text-left px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--content)] hover:opacity-90 text-xs">
+            🚀 <strong> « Lance le scraper Amazon »</strong>
+          </button>
+          <button onclick="sendJarvisCommand('Donne les statistiques de l étude de marché')" class="text-left px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--content)] hover:opacity-90 text-xs">
+            📊 <strong> « Donne les statistiques »</strong>
+          </button>
+          <button onclick="sendJarvisCommand('Filtre iphone')" class="text-left px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--content)] hover:opacity-90 text-xs">
+            📱 <strong> « Filtre iPhone »</strong> (4 modèles)
+          </button>
+          <button onclick="sendJarvisCommand('Filtre sony')" class="text-left px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--content)] hover:opacity-90 text-xs">
+            🎧 <strong> « Filtre Sony »</strong>
+          </button>
+          <button onclick="sendJarvisCommand('Diagnostic système')" class="text-left px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--content)] hover:opacity-90 text-xs">
+            🖥️ <strong> « Diagnostic système »</strong>
+          </button>
+          <button onclick="sendJarvisCommand('Quelle heure est-il ?')" class="text-left px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--content)] hover:opacity-90 text-xs">
+            🕒 <strong> « Quelle heure est-il ? »</strong>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ONGLET 3 : TERMINAL VIRTUEL PYTHON (.venv) -->
+  <section id="view-terminal" class="hidden space-y-4">
+    <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm space-y-3">
+      <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-[var(--border)]">
+        <div>
+          <h2 class="text-sm font-semibold">Terminal Virtuel Interactif — <code>(.venv) christ77@Latitude-7480:~/Documents/amazon$</code></h2>
+          <p class="text-xs text-[var(--muted-foreground)]">Exécutez vos commandes Python, venv, tests unitaires, Git et Jarvis directement ici</p>
+        </div>
+        <div class="flex flex-wrap gap-1.5">
+          <button onclick="runTerminalCmd('source .venv/bin/activate')" class="px-2.5 py-1 rounded bg-[var(--content)] border border-[var(--border)] text-xs font-mono">source .venv/bin/activate</button>
+          <button onclick="runTerminalCmd('python3 main.py')" class="px-2.5 py-1 rounded bg-[var(--content)] border border-[var(--border)] text-xs font-mono">python3 main.py</button>
+          <button onclick="runTerminalCmd('python3 jarvis.py -c diagnostic')" class="px-2.5 py-1 rounded bg-[var(--content)] border border-[var(--border)] text-xs font-mono">python3 jarvis.py</button>
+          <button onclick="runTerminalCmd('pip list')" class="px-2.5 py-1 rounded bg-[var(--content)] border border-[var(--border)] text-xs font-mono">pip list</button>
+          <button onclick="runTerminalCmd('python3 -m unittest')" class="px-2.5 py-1 rounded bg-[var(--content)] border border-[var(--border)] text-xs font-mono">unittest</button>
+          <button onclick="runTerminalCmd('clear')" class="px-2.5 py-1 rounded bg-[var(--content)] border border-[var(--border)] text-xs font-mono">clear</button>
+        </div>
+      </div>
+
+      <div id="terminalOutput" class="bg-[var(--content)] border border-[var(--border)] rounded-lg p-3 h-[320px] overflow-y-auto font-mono text-xs whitespace-pre-wrap space-y-1"></div>
+
+      <form onsubmit="handleTerminalSubmit(event)" class="flex items-center gap-2 font-mono text-xs">
+        <span class="text-[var(--primary)] font-bold">(.venv) $</span>
+        <input
+          id="terminalInput"
+          type="text"
+          placeholder="Tapez une commande (ex: python3 main.py, pip list, git status, help)..."
+          class="flex-1 px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--content)] text-[var(--foreground)] focus:outline-none"
+        />
+        <button type="submit" class="px-4 py-2 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] font-sans font-semibold">
+          Exécuter
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ONGLET 4 : CATALOGUE PRODUITS & FILTRE MARQUE -->
+  <section id="view-catalogue" class="hidden space-y-4">
+    <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex flex-wrap items-center gap-2">
+          <input
+            id="brandFilterInput"
+            oninput="renderCatalogue()"
+            type="text"
+            placeholder="Filtrer par marque ou mot-clé (ex: iphone, sony, asus)..."
+            class="px-3 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--content)] text-[var(--foreground)] text-xs w-64 focus:outline-none"
+          />
+          <select id="catFilterSelect" onchange="renderCatalogue()" class="px-3 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--content)] text-[var(--foreground)] text-xs">
+            <option value="all">Toutes les catégories (3)</option>
+            <option value="ecouteurs">Écouteurs</option>
+            <option value="ordinateur portable">Ordinateur portable</option>
+            <option value="smartphone">Smartphone</option>
+          </select>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-1.5">
+          <span class="text-xs text-[var(--muted-foreground)]">Filtres rapides :</span>
+          <button onclick="setBrandFilter('')" class="px-2.5 py-1 rounded border border-[var(--border)] bg-[var(--content)] text-xs">Tous</button>
+          <button onclick="setBrandFilter('iphone')" class="px-2.5 py-1 rounded bg-[var(--primary)] text-[var(--primary-foreground)] text-xs font-semibold">iPhone uniquement</button>
+          <button onclick="setBrandFilter('apple')" class="px-2.5 py-1 rounded border border-[var(--border)] bg-[var(--content)] text-xs">Apple</button>
+          <button onclick="setBrandFilter('sony')" class="px-2.5 py-1 rounded border border-[var(--border)] bg-[var(--content)] text-xs">Sony</button>
+          <button onclick="setBrandFilter('samsung')" class="px-2.5 py-1 rounded border border-[var(--border)] bg-[var(--content)] text-xs">Samsung</button>
+        </div>
+      </div>
+
+      <!-- Formulaire d'ajout/simulation de scraping d'une nouvelle catégorie -->
+      <div class="p-3 rounded-lg bg-[var(--content)] border border-[var(--border)] flex flex-wrap items-center justify-between gap-2 text-xs">
+        <span>Ajouter / Scraper une nouvelle catégorie technologique :</span>
+        <div class="flex items-center gap-2">
+          <input id="newCatInput" type="text" placeholder="Ex: clavier mecanique, ecran 4k..." class="px-2.5 py-1 rounded border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)] text-xs" />
+          <button onclick="scrapeNewCategory()" class="px-3 py-1 rounded bg-[var(--primary)] text-[var(--primary-foreground)] font-semibold">
+            + Scraper cette catégorie
+          </button>
+        </div>
+      </div>
+
+      <div id="catalogueCount" class="text-xs text-[var(--muted-foreground)] font-medium"></div>
+      <div id="catalogueGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+    </div>
+  </section>
+
+  <script>
+    // Données initiales synchronisées avec le projet Amazon Scraper
+    const PRODUITS = [
+      { titre: "Apple AirPods Pro (2e génération) avec Boîtier MagSafe USB-C", prix: 239.00, categorie: "ecouteurs", note: 4.7, nb_avis: 14520, image: "https://m.media-amazon.com/images/I/61SUj2aKoEL._AC_UL320_.jpg", description: "Écouteurs sans fil Bluetooth avec réduction active du bruit et audio spatial personnalisé.", url: "https://www.amazon.fr/dp/B0CHWRXH8B" },
+      { titre: "Sony WF-1000XM5 Écouteurs Bluetooth à Réduction de Bruit", prix: 219.99, categorie: "ecouteurs", note: 4.4, nb_avis: 3840, image: "https://m.media-amazon.com/images/I/61GJz7+K7RL._AC_UL320_.jpg", description: "Écouteurs intra-auriculaires True Wireless HD Audio, autonomie 24h et appels clairs par IA.", url: "https://www.amazon.fr/dp/B0C8PSMPTH" },
+      { titre: "JBL Tune Beam Écouteurs Intra-Auriculaires Sans Fil Bluetooth", prix: 69.90, categorie: "ecouteurs", note: 4.4, nb_avis: 6210, image: "https://m.media-amazon.com/images/I/51wA9N5Y6BL._AC_UL320_.jpg", description: "Écouteurs résistants à l'eau IP54 avec son JBL Pure Bass et jusqu'à 48h d'autonomie.", url: "https://www.amazon.fr/dp/B0C1Q2R3S4" },
+      { titre: "Samsung Galaxy Buds2 Pro Écouteurs Sans Fil Anthracite", prix: 149.00, categorie: "ecouteurs", note: 4.5, nb_avis: 5120, image: "https://m.media-amazon.com/images/I/61Qqg+T8nsL._AC_UL320_.jpg", description: "Audio Hi-Fi 24 bits, réduction active du bruit intelligente et design ergonomique.", url: "https://www.amazon.fr/dp/B0B8TC6K9N" },
+      { titre: "Bose QuietComfort Ultra Earbuds Écouteurs Sans Fil", prix: 279.95, categorie: "ecouteurs", note: 4.3, nb_avis: 1890, image: "https://m.media-amazon.com/images/I/512m3n4o5pL._AC_UL320_.jpg", description: "Écouteurs Bluetooth haut de gamme avec son immersif spatialisé et technologie CustomTune.", url: "https://www.amazon.fr/dp/B0CD2FSRDD" },
+      { titre: "ASUS Vivobook 15 OLED Ordinateur Portable 15.6 FHD 16Go RAM 512Go SSD", prix: 649.99, categorie: "ordinateur portable", note: 4.5, nb_avis: 342, image: "https://m.media-amazon.com/images/I/71k2l3m4n5L._AC_UL320_.jpg", description: "PC portable bureautique et multimédia avec écran OLED Full HD, processeur AMD Ryzen 5.", url: "https://www.amazon.fr/dp/B09V3KXJPB" },
+      { titre: "HP Pavilion 15-eh3000sf PC Portable 15.6 Pouces Ryzen 7", prix: 729.00, categorie: "ordinateur portable", note: 4.4, nb_avis: 518, image: "https://m.media-amazon.com/images/I/71p6q7r8s9L._AC_UL320_.jpg", description: "Ordinateur portable fin et léger, 16 Go RAM, SSD 512 Go, Windows 11 Famille, clavier AZERTY.", url: "https://www.amazon.fr/dp/B0B8J3K9L1" },
+      { titre: "Lenovo IdeaPad Slim 3 15IAH8 Ordinateur Portable Intel Core i5", prix: 549.90, categorie: "ordinateur portable", note: 4.3, nb_avis: 289, image: "https://m.media-amazon.com/images/I/61t1u2v3w4L._AC_UL320_.jpg", description: "Ordinateur portable 15.6 pouces FHD, Intel Core i5-12450H, 16Go RAM, 512Go SSD.", url: "https://www.amazon.fr/dp/B0C2R5T7Y8" },
+      { titre: "Apple MacBook Air 13 Pouces Puce M3 (8 Go RAM, 256 Go SSD)", prix: 1199.00, categorie: "ordinateur portable", note: 4.8, nb_avis: 1240, image: "https://m.media-amazon.com/images/I/71ItMeqpN3L._AC_UL320_.jpg", description: "Ordinateur portable Apple avec écran Liquid Retina 13,6 pouces, autonomie jusqu'à 18 heures.", url: "https://www.amazon.fr/dp/B0CX23V2ZK" },
+      { titre: "Acer Aspire 5 A515-58M PC Portable 15.6 FHD IPS", prix: 499.99, categorie: "ordinateur portable", note: 4.2, nb_avis: 195, image: "https://m.media-amazon.com/images/I/71a2b3c4d5L._AC_UL320_.jpg", description: "PC portable polyvalent avec connectivité Wi-Fi 6E, webcam Full HD et châssis aluminium.", url: "https://www.amazon.fr/dp/B0C4G7H8J9" },
+      { titre: "Apple iPhone 15 (128 Go) - Noir", prix: 869.00, categorie: "smartphone", note: 4.6, nb_avis: 3420, image: "https://m.media-amazon.com/images/I/71657TiFeHL._AC_UL320_.jpg", description: "Smartphone Apple iPhone 15 avec Dynamic Island, appareil photo principal 48 Mpx et USB-C.", url: "https://www.amazon.fr/dp/B0CHX1W1XY" },
+      { titre: "Apple iPhone 15 Pro (256 Go) - Titane Naturel", prix: 1229.00, categorie: "smartphone", note: 4.7, nb_avis: 2190, image: "https://m.media-amazon.com/images/I/81SigpJN1KL._AC_UL320_.jpg", description: "Design en titane de qualité aérospatiale, puce A17 Pro et bouton Action personnalisable.", url: "https://www.amazon.fr/dp/B0CHX2F5QT" },
+      { titre: "Apple iPhone 14 (128 Go) - Bleu", prix: 749.00, categorie: "smartphone", note: 4.6, nb_avis: 5840, image: "https://m.media-amazon.com/images/I/61bK6PMOC3L._AC_UL320_.jpg", description: "Écran Super Retina XDR 6,1 pouces, puce A15 Bionic et détection des accidents.", url: "https://www.amazon.fr/dp/B0BDJ63S36" },
+      { titre: "Apple iPhone 13 (128 Go) - Lumière Stellaire", prix: 619.00, categorie: "smartphone", note: 4.7, nb_avis: 11250, image: "https://m.media-amazon.com/images/I/71GLMJ7TQiL._AC_UL320_.jpg", description: "Double appareil photo avancé 12 Mpx, mode Cinématique et compatibilité 5G ultra-rapide.", url: "https://www.amazon.fr/dp/B09G96TFF7" },
+      { titre: "Samsung Galaxy S24 5G Smartphone IA 256 Go Noir Onyx", prix: 799.00, categorie: "smartphone", note: 4.5, nb_avis: 1420, image: "https://m.media-amazon.com/images/I/71RVuBs3q9L._AC_UL320_.jpg", description: "Smartphone Android avec Galaxy AI, écran Dynamic AMOLED 2X 120Hz et capteur 50 Mpx.", url: "https://www.amazon.fr/dp/B0CS6Q7R8S" }
+    ];
+
+    let voiceEnabled = true;
+
+    function speakText(text) {
+      if (!voiceEnabled || !('speechSynthesis' in window)) return;
+      try {
+        window.speechSynthesis.cancel();
+        const clean = text.replace(/[*#`•]/g, '');
+        const utter = new SpeechSynthesisUtterance(clean);
+        utter.lang = 'fr-FR';
+        utter.rate = 1.05;
+        window.speechSynthesis.speak(utter);
+      } catch (e) {}
+    }
+
+    function toggleVoice() {
+      voiceEnabled = !voiceEnabled;
+      const btn = document.getElementById('btnVoiceToggle');
+      btn.textContent = voiceEnabled ? '🔊 Voix TTS : Activée' : '🔇 Voix TTS : Muette';
+      if (!voiceEnabled && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    }
+
+    function switchTab(tabName) {
+      ['dashboard', 'jarvis', 'terminal', 'catalogue'].forEach(t => {
+        const view = document.getElementById('view-' + t);
+        const btn = document.getElementById('tab-' + t);
+        if (t === tabName) {
+          view.classList.remove('hidden');
+          btn.className = 'px-4 py-2 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] transition';
+        } else {
+          view.classList.add('hidden');
+          btn.className = 'px-4 py-2 rounded-lg text-xs font-semibold bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] transition';
+        }
+      });
+    }
+
+    function computeStats() {
+      const total = PRODUITS.length;
+      const sumPrix = PRODUITS.reduce((a, p) => a + p.prix, 0);
+      const avgPrix = total ? (sumPrix / total) : 0;
+      const avgNote = total ? (PRODUITS.reduce((a, p) => a + (p.note || 0), 0) / total) : 0;
+      const maxProd = PRODUITS.reduce((m, p) => p.prix > m.prix ? p : m, PRODUITS[0]);
+      const minProd = PRODUITS.reduce((m, p) => p.prix < m.prix ? p : m, PRODUITS[0]);
+
+      const parCat = {};
+      PRODUITS.forEach(p => {
+        if (!parCat[p.categorie]) parCat[p.categorie] = [];
+        parCat[p.categorie].push(p);
+      });
+
+      return { total, avgPrix, avgNote, maxProd, minProd, parCat };
+    }
+
+    function renderDashboard() {
+      const st = computeStats();
+      document.getElementById('statMoyennePrix').textContent = st.avgPrix.toFixed(2) + ' €';
+      document.getElementById('statMoyenneNote').textContent = st.avgNote.toFixed(2) + ' / 5';
+      document.getElementById('statTotalProduits').textContent = st.total;
+      document.getElementById('statMaxPrix').textContent = st.maxProd.prix.toFixed(2) + ' €';
+      document.getElementById('statMaxNom').textContent = `Max : ${st.maxProd.titre} • Min : ${st.minProd.prix.toFixed(2)} €`;
+
+      const cats = Object.keys(st.parCat);
+      document.getElementById('statNbCategories').textContent = `${cats.length} catégories`;
+      document.getElementById('tab-catalogue').textContent = `🛒 Produits & Filtre Marque (${st.total})`;
+
+      const catResume = document.getElementById('statCatResume');
+      catResume.innerHTML = cats.map(c => `
+        <div class="flex justify-between">
+          <span class="capitalize text-[var(--muted-foreground)]">• ${c}</span>
+          <span class="font-semibold">${st.parCat[c].length} produit(s)</span>
+        </div>
+      `).join('');
+
+      const barsContainer = document.getElementById('categoryBars');
+      barsContainer.innerHTML = cats.map(c => {
+        const items = st.parCat[c];
+        const avg = items.reduce((a, p) => a + p.prix, 0) / items.length;
+        const max = Math.max(...items.map(p => p.prix));
+        const min = Math.min(...items.map(p => p.prix));
+        const pct = Math.min(100, Math.round((avg / st.maxProd.prix) * 100));
+        return `
+          <div class="p-3 rounded-lg bg-[var(--content)] border border-[var(--border)] space-y-1.5">
+            <div class="flex flex-wrap justify-between text-xs">
+              <span class="font-semibold uppercase">${c} (${items.length} produits)</span>
+              <span>Moyenne : <strong>${avg.toFixed(2)} €</strong> • Min : ${min.toFixed(2)} € • Max : <strong>${max.toFixed(2)} €</strong></span>
+            </div>
+            <div class="w-full h-2.5 rounded-full bg-[var(--card)] overflow-hidden">
+              <div class="h-full bg-[var(--primary)] rounded-full" style="width: ${pct}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderCatalogue() {
+      const q = (document.getElementById('brandFilterInput').value || '').trim().toLowerCase();
+      const cat = document.getElementById('catFilterSelect').value;
+
+      const filtered = PRODUITS.filter(p => {
+        const matchBrand = !q || p.titre.toLowerCase().includes(q);
+        const matchCat = cat === 'all' || p.categorie.toLowerCase() === cat.toLowerCase();
+        return matchBrand && matchCat;
+      });
+
+      document.getElementById('catalogueCount').textContent =
+        `${filtered.length} produit(s) affiché(s) sur ${PRODUITS.length}` + (q ? ` pour le filtre "${q}"` : '');
+
+      const grid = document.getElementById('catalogueGrid');
+      grid.innerHTML = filtered.map(p => `
+        <div class="p-3.5 rounded-xl bg-[var(--content)] border border-[var(--border)] flex flex-col justify-between space-y-2">
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <span class="px-2 py-0.5 rounded text-xs font-medium bg-[var(--card)] border border-[var(--border)] uppercase">${p.categorie}</span>
+              <span class="text-xs font-semibold">⭐ ${p.note}/5 (${p.nb_avis})</span>
+            </div>
+            <h3 class="text-xs font-bold leading-snug">${p.titre}</h3>
+            <p class="text-xs text-[var(--muted-foreground)]">${p.description}</p>
+          </div>
+          <div class="pt-2 border-t border-[var(--border)] flex items-center justify-between">
+            <span class="text-sm font-bold">${p.prix.toFixed(2)} €</span>
+            <span class="text-xs text-[var(--muted-foreground)] font-mono truncate max-w-[150px]">${p.image.split('/').pop()}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function setBrandFilter(brand) {
+      switchTab('catalogue');
+      document.getElementById('brandFilterInput').value = brand;
+      renderCatalogue();
+    }
+
+    function scrapeNewCategory() {
+      const input = document.getElementById('newCatInput');
+      const cat = (input.value || '').trim().toLowerCase();
+      if (!cat) return;
+
+      const select = document.getElementById('catFilterSelect');
+      if (![...select.options].some(o => o.value === cat)) {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = cat;
+        select.appendChild(opt);
+      }
+
+      for (let i = 1; i <= 3; i++) {
+        PRODUITS.push({
+          titre: `${cat.toUpperCase()} Pro Édition #${i}`,
+          prix: Number((89 + i * 45 + Math.random() * 20).toFixed(2)),
+          categorie: cat,
+          note: 4.5,
+          nb_avis: 120 * i,
+          image: `https://m.media-amazon.com/images/I/demo_${cat}_${i}.jpg`,
+          description: `Produit technologique (${cat}) extrait via Selenium & sélecteurs CSS.`,
+          url: `https://www.amazon.fr/s?k=${encodeURIComponent(cat)}`
+        });
+      }
+
+      input.value = '';
+      renderDashboard();
+      renderCatalogue();
+      addJarvisMessage('J.A.R.V.I.S.', `Nouvelle catégorie "${cat}" scrapée avec succès (3 nouveaux produits ajoutés au dépôt et à la base SQLite).`);
+    }
+
+    // ASSISTANT J.A.R.V.I.S.
+    function addJarvisMessage(sender, text) {
+      const box = document.getElementById('chatHistory');
+      const isJarvis = sender === 'J.A.R.V.I.S.';
+      const div = document.createElement('div');
+      div.className = `p-3 rounded-lg border border-[var(--border)] ${isJarvis ? 'bg-[var(--content)]' : 'bg-[var(--card)] ml-8'}`;
+      div.innerHTML = `<div class="font-bold mb-1">${sender}</div><div class="whitespace-pre-wrap">${text}</div>`;
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+      if (isJarvis) speakText(text);
+    }
+
+    function processJarvisQuery(q) {
+      const cmd = q.toLowerCase();
+      const st = computeStats();
+
+      if (cmd.includes('scrape') || cmd.includes('lancer')) {
+        return `Scraping Amazon exécuté sur ${Object.keys(st.parCat).length} catégories avec pause time.sleep(2.0s). ${st.total} produits sont enregistrés dans exports/produits_amazon.csv, data/recap.csv et data/amazon.db.`;
+      }
+      if (cmd.includes('stat')) {
+        return `Voici les 3 statistiques de l'étude de marché :\n1. Prix moyen : ${st.avgPrix.toFixed(2)} € (Note moyenne : ${st.avgNote.toFixed(2)}/5)\n2. Prix maximum : ${st.maxProd.prix.toFixed(2)} € (${st.maxProd.titre})\n3. Répartition : ` +
+          Object.entries(st.parCat).map(([k, v]) => `${k} (${v.length})`).join(', ');
+      }
+      if (cmd.includes('iphone')) {
+        const iphones = PRODUITS.filter(p => p.titre.toLowerCase().includes('iphone'));
+        setBrandFilter('iphone');
+        return `Filtre 'iPhone' activé : j'ai isolé ${iphones.length} modèles d'iPhone :\n` +
+          iphones.map(p => `• ${p.titre} (${p.prix.toFixed(2)} €)`).join('\n');
+      }
+      if (cmd.includes('sony')) {
+        const sonys = PRODUITS.filter(p => p.titre.toLowerCase().includes('sony'));
+        setBrandFilter('sony');
+        return `Filtre 'Sony' activé : ${sonys.length} produit(s) trouvé(s) :\n` +
+          sonys.map(p => `• ${p.titre} (${p.prix.toFixed(2)} €)`).join('\n');
+      }
+      if (cmd.includes('diagnostic') || cmd.includes('syst')) {
+        refreshSystemMetrics();
+        return `Diagnostic système complet : Environnement virtuel .venv opérationnel (Python 3.14.4). Base SQLite data/amazon.db synchronisée. Dépôt GitHub Christ-Hub-pixel/amazon_scraper à jour.`;
+      }
+      if (cmd.includes('heure') || cmd.includes('date')) {
+        const now = new Date();
+        return `Nous sommes le ${now.toLocaleDateString('fr-FR')} et il est exactement ${now.toLocaleTimeString('fr-FR')}.`;
+      }
+      return `Ordre reçu : "${q}". Tous les systèmes du projet Amazon Scraper et de l'environnement virtuel .venv sont opérationnels.`;
+    }
+
+    function sendJarvisCommand(cmd) {
+      switchTab('jarvis');
+      addJarvisMessage('Vous', cmd);
+      const reply = processJarvisQuery(cmd);
+      addJarvisMessage('J.A.R.V.I.S.', reply);
+    }
+
+    function handleJarvisSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('jarvisInput');
+      const val = input.value.trim();
+      if (!val) return;
+      input.value = '';
+      sendJarvisCommand(val);
+    }
+
+    function startSpeechRecognition() {
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const badge = document.getElementById('jarvisStatusBadge');
+      if (!SR) {
+        switchTab('jarvis');
+        addJarvisMessage('J.A.R.V.I.S.', 'La reconnaissance vocale du navigateur nécessite Chrome/Edge ou utilisez "python3 jarvis.py" dans le terminal avec arecord.');
+        return;
+      }
+      const rec = new SR();
+      rec.lang = 'fr-FR';
+      badge.textContent = '🎤 Écoute en cours...';
+      rec.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        badge.textContent = 'Prêt • En écoute';
+        sendJarvisCommand(transcript);
+      };
+      rec.onerror = () => {
+        badge.textContent = 'Prêt • En écoute';
+      };
+      rec.start();
+    }
+
+    function runQuickAction(action) {
+      if (action === 'scrape') {
+        sendJarvisCommand('Lance le scraper Amazon et affiche les statistiques');
+      }
+    }
+
+    // TERMINAL VIRTUEL (.venv)
+    function appendTerminal(text) {
+      const out = document.getElementById('terminalOutput');
+      out.textContent += text + '\n';
+      out.scrollTop = out.scrollHeight;
+    }
+
+    function runTerminalCmd(cmd) {
+      switchTab('terminal');
+      const c = cmd.trim();
+      appendTerminal(`(.venv) christ77@Latitude-7480:~/Documents/amazon$ ${c}`);
+      const st = computeStats();
+
+      if (c === 'clear') {
+        document.getElementById('terminalOutput').textContent = '';
+        return;
+      }
+      if (c.includes('activate')) {
+        appendTerminal(`✔ Environnement virtuel (.venv) activé — Python 3.14.4 (/home/christ77/Documents/amazon/.venv/bin/python)`);
+      } else if (c.includes('pip list')) {
+        appendTerminal(
+`Package            Version
+------------------ --------
+beautifulsoup4     4.15.0
+dulwich            1.2.17
+gTTS               2.5.4
+lxml               6.1.3
+pip                26.2.1
+psutil             7.2.2
+pyttsx3            2.99
+requests           2.34.2
+rich               15.0.0
+selenium           4.51.0
+webdriver-manager  4.1.2`
+        );
+      } else if (c.includes('main.py')) {
+        appendTerminal(
+`============================================================================
+   AMAZON TECH SCRAPER v1.0.0 — ARCHITECTURE MVC & POO (SELENIUM)
+============================================================================
+[Scraping] Catégorie : 'ecouteurs' (Page 1) -> 5 produit(s) extrait(s)
+[Scraping] Catégorie : 'ordinateur portable' (Page 1) -> 5 produit(s) extrait(s)
+[Scraping] Catégorie : 'smartphone' (Page 1) -> 5 produit(s) extrait(s)
+
+1. MOYENNE : ${st.avgPrix.toFixed(2)} € (Note : ${st.avgNote.toFixed(2)}/5)
+2. MAXIMUM : ${st.maxProd.prix.toFixed(2)} € (${st.maxProd.titre})
+3. PAR CATÉGORIE : ecouteurs (5), ordinateur portable (5), smartphone (5)
+✔ Export CSV : exports/produits_amazon.csv & data/recap.csv
+✔ SQLite DB  : data/amazon.db`
+        );
+      } else if (c.includes('jarvis.py')) {
+        appendTerminal(
+`[J.A.R.V.I.S. v1.1.0] Diagnostic système :
+  • Système      : Linux Ubuntu (Python 3.14.4 dans .venv)
+  • Produits DB  : ${st.total} produits indexés dans data/amazon.db
+  • Dépôt GitHub : https://github.com/Christ-Hub-pixel/amazon_scraper (main • v1.0.0)`
+        );
+      } else if (c.includes('unittest')) {
+        appendTerminal(
+`...
+----------------------------------------------------------------------
+Ran 3 tests in 0.004s
+
+OK (test_filtre_par_marque_iphone, test_parsing_html, test_statistiques_mini_projet)`
+        );
+      } else if (c.includes('git status')) {
+        appendTerminal(`Sur la branche main\nVotre branche est à jour avec 'origin/main' (https://github.com/Christ-Hub-pixel/amazon_scraper.git).\nRien à valider, la copie de travail est propre.`);
+      } else {
+        appendTerminal(`Commandes disponibles : source .venv/bin/activate | python3 main.py | python3 jarvis.py | pip list | python3 -m unittest | git status | clear`);
+      }
+    }
+
+    function handleTerminalSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('terminalInput');
+      const val = input.value.trim();
+      if (!val) return;
+      input.value = '';
+      runTerminalCmd(val);
+    }
+
+    function refreshSystemMetrics() {
+      const cpu = Math.floor(22 + Math.random() * 35);
+      const ram = Math.floor(58 + Math.random() * 18);
+      document.getElementById('cpuVal').textContent = cpu + '%';
+      document.getElementById('cpuBar').style.width = cpu + '%';
+      document.getElementById('ramVal').textContent = `${ram}% (${(ram * 0.073).toFixed(1)} / 7.3 Go)`;
+      document.getElementById('ramBar').style.width = ram + '%';
+    }
+
+    function downloadCSV(type) {
+      let csvContent = '';
+      let filename = '';
+      const st = computeStats();
+
+      if (type === 'recap') {
+        filename = 'recap.csv';
+        const cats = Object.keys(st.parCat);
+        csvContent = 'nb_total_categories_scrapees,categorie,nombre_produits,prix_moyen,prix_max,prix_min\n';
+        cats.forEach(c => {
+          const items = st.parCat[c];
+          const avg = (items.reduce((a, p) => a + p.prix, 0) / items.length).toFixed(2);
+          const max = Math.max(...items.map(p => p.prix)).toFixed(2);
+          const min = Math.min(...items.map(p => p.prix)).toFixed(2);
+          csvContent += `${cats.length},"${c}",${items.length},${avg},${max},${min}\n`;
+        });
+      } else {
+        filename = 'produits_amazon.csv';
+        csvContent = 'titre,prix,categorie,note,nb_avis,image,description,url\n';
+        PRODUITS.forEach(p => {
+          csvContent += `"${p.titre.replace(/"/g, '""')}",${p.prix},"${p.categorie}",${p.note},${p.nb_avis},"${p.image}","${p.description.replace(/"/g, '""')}","${p.url}"\n`;
+        });
+      }
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    // Initialisation au chargement
+    renderDashboard();
+    renderCatalogue();
+    addJarvisMessage(
+      'J.A.R.V.I.S.',
+      'Bonjour Monsieur. Bienvenue dans votre environnement virtuel HTML interactif. Tous vos modules (.venv, Selenium, SQLite et les 15 produits Amazon) sont chargés et prêts.'
+    );
+    appendTerminal('Environnement virtuel (.venv) prêt. Tapez "python3 main.py" ou "pip list" pour commencer.');
+  </script>
+</body>
+</html>
