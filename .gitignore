@@ -1,0 +1,16 @@
+# Environnement virtuel Python
+.venv/
+venv/
+ENV/
+
+# Fichiers compilés Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Fichiers temporaires et IDE
+.vscode/
+.idea/
+*.log
+.DS_Store
+

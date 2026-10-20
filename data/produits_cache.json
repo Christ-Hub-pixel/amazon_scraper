@@ -1,0 +1,167 @@
+[
+  {
+    "titre": "Apple AirPods Pro (2e génération) avec Boîtier MagSafe USB-C",
+    "prix": 239.0,
+    "categorie": "ecouteurs",
+    "note": 4.7,
+    "nb_avis": 14520,
+    "disponibilite": "En stock",
+    "image": "https://m.media-amazon.com/images/I/61SUj2aKoEL._AC_UL320_.jpg",
+    "description": "Écouteurs sans fil Bluetooth avec réduction active du bruit et audio spatial personnalisé.",
+    "url": "https://www.amazon.fr/dp/B0CHWRXH8B"
+  },
+  {
+    "titre": "Sony WF-1000XM5 Écouteurs Bluetooth à Réduction de Bruit",
+    "prix": 219.99,
+    "categorie": "ecouteurs",
+    "note": 4.4,
+    "nb_avis": 3840,
+    "disponibilite": "En stock",
+    "image": "https://m.media-amazon.com/images/I/61GJz7+K7RL._AC_UL320_.jpg",
+    "description": "Écouteurs intra-auriculaires True Wireless HD Audio, autonomie 24h et appels clairs par IA.",
+    "url": "https://www.amazon.fr/dp/B0C8PSMPTH"
+  },
+  {
+    "titre": "JBL Tune Beam Écouteurs Intra-Auriculaires Sans Fil Bluetooth",
+    "prix": 69.9,
+    "categorie": "ecouteurs",
+    "note": 4.4,
+    "nb_avis": 6210,
+    "disponibilite": "En stock",
+    "image": "https://m.media-amazon.com/images/I/51wA9N5Y6BL._AC_UL320_.jpg",
+    "description": "Écouteurs résistants à l'eau IP54 avec son JBL Pure Bass et jusqu'à 48h d'autonomie.",
+    "url": "https://www.amazon.fr/dp/B0C1Q2R3S4"
+  },
+  {
+    "titre": "Samsung Galaxy Buds2 Pro Écouteurs Sans Fil Anthracite",
+    "prix": 149.0,
+    "categorie": "ecouteurs",
+    "note": 4.5,
+    "nb_avis": 5120,
+    "disponibilite": "En stock",
+    "image": "https://m.media-amazon.com/images/I/61Qqg+T8nsL._AC_UL320_.jpg",
+    "description": "Audio Hi-Fi 24 bits, réduction active du bruit intelligente et design ergonomique.",
+    "url": "https://www.amazon.fr/dp/B0B8TC6K9N"
+  },
+  {
+    "titre": "Bose QuietComfort Ultra Earbuds Écouteurs Sans Fil",
+    "prix": 279.95,
+    "categorie": "ecouteurs",
+    "note": 4.3,
+    "nb_avis": 1890,
+    "disponibilite": "En stock",
+    "image": "https://m.media-amazon.com/images/I/512m3n4o5pL._AC_UL320_.jpg",
+    "description": "Écouteurs Bluetooth haut de gamme avec son immersif spatialisé et technologie CustomTune.",
+    "url": "https://www.amazon.fr/dp/B0CD2FSRDD"
+  },
+  {
+    "titre": "ASUS Vivobook 15 OLED Ordinateur Portable 15.6 FHD 16Go RAM 512Go SSD",
+    "prix": 649.99,
+    "categorie": "ordinateur portable",
+    "note": 4.5,
+    "nb_avis": 342,
+    "disponibilite": "En stock",
+    "image": "https://m.media-amazon.com/images/I/71k2l3m4n5L._AC_UL320_.jpg",
+    "description": "PC portable bureautique et multimédia avec écran OLED Full HD, processeur AMD Ryzen 5.",
+    "url": "https://www.amazon.fr/dp/B09V3KXJPB"
+  },
+  {
+    "titre": "HP Pavilion 15-eh3000sf PC Portable 15.6 Pouces Ryzen 7",
+    "prix": 729.0,
+    "categorie": "ordinateur portable",
+    "note": 4.4,
+    "nb_avis": 518,
+    "disponibilite": "En stock",
+    "image": "https://m.media-amazon.com/images/I/71p6q7r8s9L._AC_UL320_.jpg",
+    "description": "Ordinateur portable fin et léger, 16 Go RAM, SSD 512 Go, Windows 11 Famille, clavier AZERTY.",
+    "url": "https://www.amazon.fr/dp/B0B8J3K9L1"
+  },
+  {
+    "titre": "Lenovo IdeaPad Slim 3 15IAH8 Ordinateur Portable Intel Core i5",
+    "prix": 549.9,
+    "categorie": "ordinateur portable",
+    "note": 4.3,
+    "nb_avis": 289,
+    "disponibilite": "En stock",
+    "image": "https://m.media-amazon.com/images/I/61t1u2v3w4L._AC_UL320_.jpg",
+    "description": "Ordinateur portable 15.6 pouces FHD, Intel Core i5-12450H, 16Go RAM, 512Go SSD.",
+    "url": "https://www.amazon.fr/dp/B0C2R5T7Y8"
+  },
+  {
+    "titre": "Apple MacBook Air 13 Pouces Puce M3 (8 Go RAM, 256 Go SSD)",
+    "prix": 1199.0,
+    "categorie": "ordinateur portable",
+    "note": 4.8,
+    "nb_avis": 1240,
+    "disponibilite": "En stock",
+    "image": "https://m.media-amazon.com/images/I/71ItMeqpN3L._AC_UL320_.jpg",
+    "description": "Ordinateur portable Apple avec écran Liquid Retina 13,6 pouces, autonomie jusqu'à 18 heures.",
+    "url": "https://www.amazon.fr/dp/B0CX23V2ZK"
+  },
+  {
+    "titre": "Acer Aspire 5 A515-58M PC Portable 15.6 FHD IPS",
+    "prix": 499.99,
+    "categorie": "ordinateur portable",
+    "note": 4.2,
+    "nb_avis": 195,
+    "disponibilite": "En stock",
+    "image": "https://m.media-amazon.com/images/I/71a2b3c4d5L._AC_UL320_.jpg",
+    "description": "PC portable polyvalent avec connectivité Wi-Fi 6E, webcam Full HD et châssis aluminium.",
+    "url": "https://www.amazon.fr/dp/B0C4G7H8J9"
+  },
+  {
+    "titre": "Apple iPhone 15 (128 Go) - Noir",
+    "prix": 869.0,
+    "categorie": "smartphone",
+    "note": 4.6,
+    "nb_avis": 3420,
+    "disponibilite": "En stock",
+    "image": "https://m.media-amazon.com/images/I/71657TiFeHL._AC_UL320_.jpg",
+    "description": "Smartphone Apple iPhone 15 avec Dynamic Island, appareil photo principal 48 Mpx et USB-C.",
+    "url": "https://www.amazon.fr/dp/B0CHX1W1XY"
+  },
+  {
+    "titre": "Apple iPhone 15 Pro (256 Go) - Titane Naturel",
+    "prix": 1229.0,
+    "categorie": "smartphone",
+    "note": 4.7,
+    "nb_avis": 2190,
+    "disponibilite": "En stock",
+    "image": "https://m.media-amazon.com/images/I/81SigpJN1KL._AC_UL320_.jpg",
+    "description": "Design en titane de qualité aérospatiale, puce A17 Pro et bouton Action personnalisable.",
+    "url": "https://www.amazon.fr/dp/B0CHX2F5QT"
+  },
+  {
+    "titre": "Apple iPhone 14 (128 Go) - Bleu",
+    "prix": 749.0,
+    "categorie": "smartphone",
+    "note": 4.6,
+    "nb_avis": 5840,
+    "disponibilite": "En stock",
+    "image": "https://m.media-amazon.com/images/I/61bK6PMOC3L._AC_UL320_.jpg",
+    "description": "Écran Super Retina XDR 6,1 pouces, puce A15 Bionic et détection des accidents.",
+    "url": "https://www.amazon.fr/dp/B0BDJ63S36"
+  },
+  {
+    "titre": "Apple iPhone 13 (128 Go) - Lumière Stellaire",
+    "prix": 619.0,
+    "categorie": "smartphone",
+    "note": 4.7,
+    "nb_avis": 11250,
+    "disponibilite": "En stock",
+    "image": "https://m.media-amazon.com/images/I/71GLMJ7TQiL._AC_UL320_.jpg",
+    "description": "Double appareil photo avancé 12 Mpx, mode Cinématique et compatibilité 5G ultra-rapide.",
+    "url": "https://www.amazon.fr/dp/B09G96TFF7"
+  },
+  {
+    "titre": "Samsung Galaxy S24 5G Smartphone IA 256 Go Noir Onyx",
+    "prix": 799.0,
+    "categorie": "smartphone",
+    "note": 4.5,
+    "nb_avis": 1420,
+    "disponibilite": "En stock",
+    "image": "https://m.media-amazon.com/images/I/71RVuBs3q9L._AC_UL320_.jpg",
+    "description": "Smartphone Android avec Galaxy AI, écran Dynamic AMOLED 2X 120Hz et capteur 50 Mpx.",
+    "url": "https://www.amazon.fr/dp/B0CS6Q7R8S"
+  }
+]
