@@ -1,0 +1,21 @@
+# Environnement virtuel Python
+.venv/
+env/
+venv/
+ENV/
+
+# Byte-code Python & caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Fichiers temporaires de tests
+scratch/
+test_*.py
